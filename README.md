@@ -28,4 +28,4 @@ Editor to open created go file if `-e` option is specified.
  - Go Playground(http://play.golang.org)
 
 `gopark` create text environment in local machine.
-Therefore, allow you to use your favorite editor and install extra packages.
+Therefore, you can your favorite editor and install extra packages.
