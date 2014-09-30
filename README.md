@@ -5,7 +5,12 @@ You can edit source with favorite editor and install extra packages.
 
 ## Demo
 Just run `gopark`.
+
+![demo1.gif](https://raw.github.com/doloopwhile/gopark/master/demo1.gif)
+
 Or, with option `-e` to open with editor.
+
+![demo2.gif](https://raw.github.com/doloopwhile/gopark/master/demo2.gif)
 
 ## Install
 ```
