@@ -6,11 +6,7 @@ You can edit source with favorite editor and install extra packages.
 ## Demo
 Just run `goplay`.
 
-![demo1.gif](https://raw.github.com/doloopwhile/goplay/master/demo1.gif)
-
-Or, with option `-e` to open with editor.
-
-![demo2.gif](https://raw.github.com/doloopwhile/goplay/master/demo2.gif)
+![demo.gif](https://raw.github.com/doloopwhile/goplay/master/demo.gif)
 
 ## Install
 ```
