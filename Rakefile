@@ -24,6 +24,6 @@ task :deps do
   sh %Q{go get #{verbose} -d}
 end
 
-task :gox do
-  sh %Q{gox -output="dist/{{.Dir}}.{{.OS}}_{{.Arch}}" -arch="386 amd64" -os 'linux windows darwin' -ldflags #{ldflags.()}}
+task :goxc do
+  sh %Q{goxc -tasks='xc archive' -d dist -bc='linux,!arm windows,386 darwin' -build-ldflags=#{ldflags.()}}
 end
