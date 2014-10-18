@@ -45,7 +45,7 @@ func abort(err error) {
 }
 
 func getCampRootPath() (string, error) {
-	root, err := gitconfig.Global("gopark.root")
+	root, err := gitconfig.Global("goplay.root")
 	if err == nil {
 		return root, nil
 	}
@@ -54,7 +54,7 @@ func getCampRootPath() (string, error) {
 		return "", err
 	}
 
-	return "/tmp/gopark", nil
+	return "/tmp/goplay", nil
 }
 
 func listCampDirs() error {
@@ -115,7 +115,7 @@ func parseConfig() error {
 	flag.Parse()
 
 	if *v {
-		fmt.Printf("gopark: %s\n", version)
+		fmt.Printf("goplay: %s\n", version)
 		os.Exit(0)
 	}
 

@@ -1,27 +1,23 @@
-# gopark
+# goplay
 
 Create local go sandbox.
 You can edit source with favorite editor and install extra packages.
 
 ## Demo
-Just run `gopark`.
+Just run `goplay`.
 
-![demo1.gif](https://raw.github.com/doloopwhile/gopark/master/demo1.gif)
-
-Or, with option `-e` to open with editor.
-
-![demo2.gif](https://raw.github.com/doloopwhile/gopark/master/demo2.gif)
+![demo.gif](https://raw.github.com/doloopwhile/goplay/master/demo.gif)
 
 ## Install
 ```
-go get github.com/doloopwhile/gopark
+go get github.com/doloopwhile/goplay
 ```
 
 ## Configuration
 
-### `gopark.root` in `git config`
-The path to directory in which `gopark` create sandbox directory.
-Defaults to `/tmp/gopark`.
+### `goplay.root` in `git config`
+The path to directory in which `goplay` create sandbox directory.
+Defaults to `/tmp/goplay`.
 
 ### `$EDITOR` environmnet variable
 Editor to open created go file if `-e` option is specified.
@@ -29,7 +25,7 @@ Editor to open created go file if `-e` option is specified.
 ## VS.
  - Go Playground(http://play.golang.org)
 
-`gopark` create text environment in local machine.
+`goplay` create text environment in local machine.
 Therefore, you can your favorite editor and install extra packages.
 
 ## License
@@ -38,4 +34,4 @@ Please see LICENSE file for details.
 
 ## Contribution
 I am looking for your pull request.
-https://github.com/doloopwhile/gopark/pulls
+https://github.com/doloopwhile/goplay/pulls
