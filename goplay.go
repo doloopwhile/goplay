@@ -65,6 +65,9 @@ func listCampDirs() error {
 
 	entries, err := ioutil.ReadDir(root)
 	if err != nil {
+		if os.IsNotExist(err) {
+			return nil
+		}
 		return err
 	}
 
