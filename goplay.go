@@ -17,13 +17,8 @@ import (
 var (
 	config  Config
 	version string
-)
 
-const (
-	timeFormat = "2006-01-02_15-04-05"
-)
-
-var sourceTemplate = []byte(`package main
+	sourceTemplate = []byte(`package main
 
 import (
 	"fmt"
@@ -33,18 +28,14 @@ func main() {
 	fmt.Println("Hello, playground")
 }
 `)
+)
 
 type Config struct {
 	List bool
 	Edit bool
 }
 
-func abort(err error) {
-	fmt.Fprintln(os.Stderr, err)
-	os.Exit(1)
-}
-
-func getCampRootPath() (string, error) {
+func playgroundRootPath() (string, error) {
 	root, err := gitconfig.Global("goplay.root")
 	if err == nil {
 		return root, nil
@@ -57,8 +48,8 @@ func getCampRootPath() (string, error) {
 	return "/tmp/goplay", nil
 }
 
-func listCampDirs() error {
-	root, err := getCampRootPath()
+func listPlaygroundDirs() error {
+	root, err := playgroundRootPath()
 	if err != nil {
 		return err
 	}
@@ -90,21 +81,20 @@ func listCampDirs() error {
 	return nil
 }
 
-func createCampDir() (string, error) {
-	root, err := getCampRootPath()
+func createPlaygroundDir() (string, error) {
+	root, err := playgroundRootPath()
 	if err != nil {
 		return "", err
 	}
 
-	name := time.Now().Format(timeFormat)
+	name := time.Now().Format("2006-01-02_15-04-05")
 	path := filepath.Join(root, name)
 	path, err = filepath.Abs(path)
 	if err != nil {
 		return "", err
 	}
 
-	err = os.MkdirAll(path, 0700)
-	if err != nil {
+	if err := os.MkdirAll(path, 0700); err != nil {
 		return "", err
 	}
 
@@ -125,7 +115,7 @@ func parseConfig() error {
 	return nil
 }
 
-func getenvDefault(name, defaultValue string) string {
+func getenv(name, defaultValue string) string {
 	v := os.Getenv(name)
 	if v == "" {
 		return defaultValue
@@ -158,31 +148,25 @@ func createGoFile(dirPath string) (string, error) {
 		return "", err
 	}
 
-	err = ioutil.WriteFile(path, sourceTemplate, 0600)
-	if err != nil {
+	if err := ioutil.WriteFile(path, sourceTemplate, 0600); err != nil {
 		return "", err
 	}
 	return path, err
 }
 
-func gotoCamp(dirPath, filePath string) error {
-	var err error
-
-	shell := getenvDefault("SHELL", "/bin/sh")
-	shell, err = exec.LookPath(shell)
+func gotoPlayground(dirPath, filePath string) error {
+	shell, err := exec.LookPath(getenv("SHELL", "/bin/sh"))
 	if err != nil {
 		return err
 	}
 
-	err = os.Chdir(dirPath)
-	if err != nil {
+	if err := os.Chdir(dirPath); err != nil {
 		return err
 	}
-
-	var argv []string
 
 	fmt.Fprintf(os.Stderr, "\tcd %s\n", dirPath)
 
+	var argv []string
 	if config.Edit {
 		editor, err := getEditorCommand()
 		if err != nil {
@@ -204,8 +188,7 @@ func gotoCamp(dirPath, filePath string) error {
 		return err
 	}
 
-	err = os.Setenv("GOPATH", libs+":"+os.Getenv("GOPATH"))
-	if err != nil {
+	if err := os.Setenv("GOPATH", libs+":"+os.Getenv("GOPATH")); err != nil {
 		return err
 	}
 
@@ -213,30 +196,30 @@ func gotoCamp(dirPath, filePath string) error {
 }
 
 func main() {
-	if err := parseConfig(); err != nil {
-		abort(err)
+	abortOnError := func(err error) {
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
 	}
 
+	err := parseConfig()
+	abortOnError(err)
+
 	if config.List {
-		if err := listCampDirs(); err != nil {
-			abort(err)
-		}
+		err = listPlaygroundDirs()
+		abortOnError(err)
 		os.Exit(0)
 	}
 
-	dirPath, err := createCampDir()
-	if err != nil {
-		abort(err)
-	}
+	dirPath, err := createPlaygroundDir()
+	abortOnError(err)
 
 	filePath, err := createGoFile(dirPath)
-	if err != nil {
-		abort(err)
-	}
+	abortOnError(err)
 
-	if err := gotoCamp(dirPath, filePath); err != nil {
-		abort(err)
-	}
+	err = gotoPlayground(dirPath, filePath)
+	abortOnError(err)
 
 	os.Exit(0)
 }
