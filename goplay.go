@@ -136,8 +136,9 @@ func getEditorCommand() (string, error) {
 	for _, v := range []string{"editor", "vi", "nano"} {
 		_, err := exec.LookPath(v)
 		if err != nil {
-			return v, nil
+			continue
 		}
+		return v, nil
 	}
 	return "", fmt.Errorf("editor not found, please set $EDITOR environment variable")
 }
