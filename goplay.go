@@ -41,7 +41,7 @@ func playgroundRootPath() (string, error) {
 		return root, nil
 	}
 
-	if err != gitconfig.ErrNotFound {
+	if _, ok := err.(*gitconfig.ErrNotFound); !ok {
 		return "", err
 	}
 
